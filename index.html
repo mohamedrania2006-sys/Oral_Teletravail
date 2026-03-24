@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Présentation CEJM - SIO Télétravail</title>
+    <title>Présentation CEJM SIO - Télétravail</title>
     <style>
         :root {
             --primary: #00f2ff;
             --secondary: #7000ff;
             --accent: #39ff14;
-            --bg: #050811;
-            --glass: rgba(255, 255, 255, 0.08);
+            --bg: #030712;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
 
         body, html {
             margin: 0; padding: 0;
@@ -22,124 +22,114 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
+        }
+
+        /* --- BACKGROUND ANIMÉ --- */
+        #canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        /* --- LAYOUT PLEINE LARGEUR --- */
+        .viewport {
+            width: 100vw;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-
-        /* --- BACKGROUND DYNAMIQUE --- */
-        #canvas {
-            position: fixed;
-            top: 0; left: 0;
-            z-index: -1;
-        }
-
-        /* --- CONTENEUR EXTENSIBLE --- */
-        .deck {
-            width: 95%;
-            max-width: 1200px;
-            height: 80vh;
-            position: relative;
-            perspective: 2000px;
+            padding: 20px;
         }
 
         .slide {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            padding: 5%;
+            width: 98%; /* Utilise presque toute la largeur */
+            height: 90vh; /* Utilise presque toute la hauteur */
+            padding: 40px 60px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: clamp(15px, 3vw, 30px);
+            border-radius: 20px;
             display: none;
             flex-direction: column;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto; /* Permet le scroll si le contenu dépasse sur petit écran */
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            animation: fadeZoom 0.5s ease-out forwards;
         }
 
-        .slide.active {
-            display: flex;
-            animation: slideIn 0.7s ease-out forwards;
+        .slide.active { display: flex; }
+
+        @keyframes fadeZoom {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes slideIn {
-            0% { opacity: 0; transform: scale(0.9) translateY(30px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        /* --- TYPOGRAPHIE RESPONSIVE --- */
-        h1 { font-size: clamp(2rem, 5vw, 4rem); text-align: center; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
-        h2 { color: var(--primary); font-size: clamp(1.5rem, 3vw, 2.5rem); margin-bottom: 1.5rem; border-left: 5px solid var(--accent); padding-left: 15px; }
+        /* --- TYPOGRAPHIE --- */
+        h1 { font-size: clamp(3rem, 8vw, 6rem); text-align: center; margin: 0; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        h2 { color: var(--primary); font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 30px; border-left: 8px solid var(--accent); padding-left: 25px; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* --- LAYOUT ADAPTATIF --- */
-        .content-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; 
-            align-items: center;
+        /* --- GRILLE LARGE --- */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr; /* Texte large à gauche, Image à droite */
+            gap: 60px;
             flex-grow: 1;
+            align-items: center;
         }
 
         ul { list-style: none; padding: 0; }
-        li { margin: 12px 0; font-size: clamp(1rem, 1.2vw, 1.3rem); line-height: 1.4; display: flex; align-items: flex-start; }
-        li::before { content: "⚡"; color: var(--accent); margin-right: 12px; flex-shrink: 0; }
+        li { margin: 25px 0; font-size: clamp(1.2rem, 1.8vw, 1.8rem); line-height: 1.4; display: flex; align-items: center; }
+        li::before { content: "›"; color: var(--accent); font-size: 3rem; margin-right: 20px; line-height: 0; }
 
-        .img-box {
+        .visual-zone {
             width: 100%;
-            min-height: 200px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 20px;
-            border: 1px dashed var(--primary);
+            height: 100%;
+            max-height: 500px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border-radius: 30px;
+            border: 1px solid rgba(0, 242, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-zone::after {
+            content: "INSÉRER VISUEL ICI";
             color: var(--primary);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            opacity: 0.5;
         }
 
-        /* --- NAVIGATION --- */
-        .controls {
+        /* --- NAVIGATION BASSE --- */
+        .nav-bar {
             position: fixed;
-            bottom: 5vh;
+            bottom: 20px;
+            width: 100%;
             display: flex;
-            gap: 15px;
-            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            z-index: 100;
         }
 
-        .btn {
-            background: rgba(255,255,255,0.1);
+        .nav-btn {
+            background: rgba(255,255,255,0.05);
             border: 1px solid var(--primary);
             color: white;
-            padding: clamp(8px, 2vw, 12px) clamp(20px, 4vw, 40px);
-            border-radius: 50px;
+            padding: 15px 40px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: 0.3s;
-            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
             font-weight: bold;
-            backdrop-filter: blur(10px);
+            transition: 0.2s;
+            text-transform: uppercase;
         }
 
-        .btn:hover { background: var(--primary); color: var(--bg); transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+        .nav-btn:hover { background: var(--primary); color: var(--bg); box-shadow: 0 0 30px var(--primary); }
 
-        .slide-num {
-            position: absolute;
-            bottom: 20px;
-            right: 30px;
-            font-size: 0.8rem;
-            opacity: 0.4;
-        }
+        .counter { font-family: monospace; color: var(--accent); font-size: 1.2rem; }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .slide { padding: 30px 20px; }
-            .content-grid { gap: 15px; }
-            .img-box { min-height: 120px; }
+        @media (max-width: 1000px) {
+            .main-content { grid-template-columns: 1fr; }
+            .visual-zone { display: none; }
         }
     </style>
 </head>
@@ -147,204 +137,179 @@
 
     <canvas id="canvas"></canvas>
 
-    <div class="deck">
+    <div class="viewport">
         <section class="slide active">
             <div style="margin: auto; text-align: center;">
-                <h1>TRAVAIL HYBRIDE</h1>
-                <p style="font-size: clamp(1rem, 2vw, 1.8rem); color: var(--accent); letter-spacing: 5px;">SIO : LA NOUVELLE ÉRE</p>
-                <div style="margin-top: 5vh;">
-                    <p>Fiche CEJM - Épreuve Orale</p>
-                    <p style="opacity: 0.5;">Techniciens Supérieurs SIO</p>
-                </div>
+                <p style="color: var(--accent); letter-spacing: 10px; margin-bottom: 10px;">PROJET CEJM</p>
+                <h1>LE TRAVAIL HYBRIDE</h1>
+                <div style="height: 2px; width: 200px; background: var(--accent); margin: 30px auto;"></div>
+                <p style="font-size: 2rem; opacity: 0.8;">"Le bureau n'est plus un lieu, c'est une connexion"</p>
+                <p style="margin-top: 50px; font-weight: 300;">Techniciens Supérieurs SIO</p>
             </div>
-            <div class="slide-num">1/9</div>
         </section>
 
         <section class="slide">
-            <h2>Introduction</h2>
-            <div class="content-grid">
-                <div>
-                    <ul>
-                        <li>Norme attendue : Le bureau n'est plus un lieu mais une connexion.</li>
-                        <li>Mutation métier : Gestion de micro-parcs domestiques.</li>
-                        <li><b>Problématique :</b> Allier flexibilité, sécurité et cadre légal.</li>
-                    </ul>
-                </div>
-                <div class="img-box">[Schéma : Réseau interconnecté vers domiciles]</div>
+            <h2>Problématique</h2>
+            <div class="main-content">
+                <ul>
+                    <li>Mutation profonde : Du parc centralisé aux micro-bureaux distants.</li>
+                    <li>Nouveau standard : Flexibilité et mobilité des collaborateurs.</li>
+                    <li><strong>Question centrale :</strong> Comment garantir la sécurité et la légalité sans brider la liberté ?</li>
+                </ul>
+                <div class="visual-zone"></div>
             </div>
-            <div class="slide-num">2/9</div>
         </section>
 
         <section class="slide">
-            <h2>Axe 1 : Économie (1/2)</h2>
-            <div class="content-grid">
-                <div class="img-box">[Graphique : Réduction loyers vs Budget Cloud]</div>
-                <div>
-                    <h3>Optimisation immobilière</h3>
-                    <ul>
-                        <li>Généralisation du Flex-office.</li>
-                        <li>Réduction massive des charges fixes.</li>
-                        <li>Économie : plusieurs dizaines de k€ / an.</li>
-                    </ul>
-                </div>
+            <h2>Axe 1 : Économie & Flex-Office</h2>
+            <div class="main-content">
+                <ul>
+                    <li>Réduction massive des m² loués (Flex-office).</li>
+                    <li>Baisse des charges d'exploitation (énergie, entretien).</li>
+                    <li>Gains financiers significatifs pour les PME.</li>
+                </ul>
+                <div class="visual-zone"></div>
             </div>
-            <div class="slide-num">3/9</div>
         </section>
 
         <section class="slide">
-            <h2>Axe 1 : Économie (2/2)</h2>
-            <div class="content-grid">
-                <div>
-                    <h3>Budget & Risques</h3>
-                    <ul>
-                        <li>Investissement SaaS (M365) et matériel distants.</li>
-                        <li>Le BYOD : fausse économie (surcoût support).</li>
-                        <li>Investir 1€ en sécurité évite 100€ de perte cyber.</li>
-                    </ul>
-                </div>
-                <div class="img-box">[Visuel : Coût d'une cyber-attaque]</div>
+            <h2>Axe 1 : Investissements IT</h2>
+            <div class="main-content">
+                <div class="visual-zone"></div>
+                <ul>
+                    <li>Budget SaaS (Cloud) : Passage de l'achat à l'abonnement.</li>
+                    <li>BYOD : Une économie de façade (coût de support caché).</li>
+                    <li>Le coût de l'insécurité est supérieur au coût de protection.</li>
+                </ul>
             </div>
-            <div class="slide-num">4/9</div>
         </section>
 
         <section class="slide">
-            <h2>Axe 2 : Technique (1/2)</h2>
-            <div class="content-grid">
-                <div class="img-box">[Schéma : Tunnel VPN chiffré]</div>
-                <div>
-                    <h3>Sécurisation des flux</h3>
-                    <ul>
-                        <li>Fin de la sécurité "périmétrique".</li>
-                        <li>Danger des réseaux non maîtrisés (Wi-Fi publics).</li>
-                        <li>VPN : Le tunnel indispensable pour les données.</li>
-                    </ul>
-                </div>
+            <h2>Axe 2 : Technique & VPN</h2>
+            <div class="main-content">
+                <ul>
+                    <li>Fin de la sécurité "périmétrique" (plus de murs physiques).</li>
+                    <li>Interception des flux sur réseaux publics (Wi-Fi).</li>
+                    <li>Le <strong>VPN</strong> : Tunnel de chiffrement indispensable.</li>
+                </ul>
+                <div class="visual-zone"></div>
             </div>
-            <div class="slide-num">5/9</div>
         </section>
 
         <section class="slide">
-            <h2>Axe 2 : Technique (2/2)</h2>
-            <div class="content-grid">
-                <div>
-                    <h3>MFA & Gestion MDM</h3>
-                    <ul>
-                        <li>MFA : Double protection contre le vol d'accès.</li>
-                        <li>MDM : Gestion à distance des terminaux.</li>
-                        <li>Conteneurisation des données pros/persos.</li>
-                    </ul>
-                </div>
-                <div class="img-box">[Icone : Authentification mobile]</div>
+            <h2>Axe 2 : MFA & Zéro Trust</h2>
+            <div class="main-content">
+                <div class="visual-zone"></div>
+                <ul>
+                    <li>MFA : Double verrouillage des identités.</li>
+                    <li>MDM : Maîtrise logicielle du terminal distant.</li>
+                    <li>Zéro Trust : Ne jamais faire confiance, toujours vérifier.</li>
+                </ul>
             </div>
-            <div class="slide-num">6/9</div>
         </section>
 
         <section class="slide">
-            <h2>Axe 3 : Juridique</h2>
-            <div class="content-grid">
-                <div class="img-box">[Logo CNIL & RGPD]</div>
-                <div>
-                    <h3>Conformité & Libertés</h3>
-                    <ul>
-                        <li>Charte informatique : cadre de confiance.</li>
-                        <li>Interdiction de surveillance (webcam/clavier).</li>
-                        <li>Droit à la déconnexion obligatoire.</li>
-                        <li>Risque : 4% du CA mondial de sanction.</li>
-                    </ul>
-                </div>
+            <h2>Axe 3 : Cadre Juridique</h2>
+            <div class="main-content">
+                <ul>
+                    <li>Charte Informatique : Définir les droits et devoirs.</li>
+                    <li>Interdiction du "flicage" (RGPD / CNIL).</li>
+                    <li>Droit à la déconnexion : Préserver la santé mentale.</li>
+                    <li>Risque : Amendes jusqu'à 4% du CA mondial.</li>
+                </ul>
+                <div class="visual-zone"></div>
             </div>
-            <div class="slide-num">7/9</div>
         </section>
 
         <section class="slide">
-            <div style="margin: auto; text-align: center;">
+            <div style="margin: auto; text-align: center; width: 100%;">
                 <h2>Conclusion</h2>
-                <p style="font-size: clamp(1rem, 2vw, 1.5rem); margin-bottom: 2rem;">
-                    Opportunité économique + Défi technique + Cadre juridique
-                </p>
-                <div style="background: rgba(0,242,255,0.1); padding: 20px; border-radius: 15px; border: 1px solid var(--primary);">
-                    "S'assurer que la connexion reste fluide, sécurisée et humaine."
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 50px;">
+                    <div style="padding: 40px; border: 1px solid var(--primary); background: rgba(0,242,255,0.05);">
+                        <h3 style="color: var(--primary)">ÉCONOMIE</h3>
+                        <p>Réinvestir pour transformer</p>
+                    </div>
+                    <div style="padding: 40px; border: 1px solid var(--accent); background: rgba(57,255,20,0.05);">
+                        <h3 style="color: var(--accent)">TECHNIQUE</h3>
+                        <p>Sécuriser la mobilité</p>
+                    </div>
+                    <div style="padding: 40px; border: 1px solid var(--secondary); background: rgba(112,0,255,0.05);">
+                        <h3 style="color: var(--secondary)">JURIDIQUE</h3>
+                        <p>Protéger les libertés</p>
+                    </div>
                 </div>
+                <h1 style="font-size: 3rem; margin-top: 60px;">LE BUREAU EST UNE CONNEXION</h1>
             </div>
-            <div class="slide-num">8/9</div>
         </section>
 
         <section class="slide">
             <h2>Sources & Échanges</h2>
-            <div class="content-grid">
-                <div>
-                    <ul>
-                        <li>Fiche Oral CEJM - Télétravail.</li>
-                        <li>Doctrine CNIL (Sécurité télétravail).</li>
-                        <li>Guide ANSSI - Nomades et télétravail.</li>
-                    </ul>
-                </div>
+            <div class="main-content">
+                <ul>
+                    <li>Fiche CEJM SIO - Télétravail.</li>
+                    <li>Réglementation RGPD / Recommandations CNIL.</li>
+                    <li>Guides Sécurité ANSSI (Télétravail & Mobilité).</li>
+                </ul>
                 <div style="text-align: center;">
-                    <h3 style="color: var(--accent);">Merci de votre attention</h3>
-                    <p>Questions ?</p>
+                    <h1 style="font-size: 3rem; -webkit-text-fill-color: white;">MERCI.</h1>
+                    <p style="color: var(--primary); font-size: 1.5rem;">Avez-vous des questions ?</p>
                 </div>
             </div>
-            <div class="slide-num">9/9</div>
         </section>
     </div>
 
-    <div class="controls">
-        <button class="btn" onclick="changeSlide(-1)">← Précédent</button>
-        <button class="btn" onclick="changeSlide(1)">Suivant →</button>
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">Précédent</button>
+        <span class="counter" id="count">1 / 9</span>
+        <button class="nav-btn" onclick="move(1)">Suivant</button>
     </div>
 
     <script>
-        /* --- ANIMATION ARRIÈRE-PLAN --- */
+        // --- BACKGROUND MATRIX ---
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
+        let dots = [];
 
-        function initCanvas() {
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 80; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    sx: (Math.random() - 0.5) * 0.5,
-                    sy: (Math.random() - 0.5) * 0.5
-                });
-            }
+            dots = Array.from({length: 70}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                v: Math.random() * 0.5 + 0.2
+            }));
         }
 
-        function animate() {
+        function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(0, 242, 255, 0.4)';
-            particles.forEach(p => {
-                p.x += p.sx; p.y += p.sy;
-                if (p.x < 0 || p.x > canvas.width) p.sx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.sy *= -1;
+            ctx.fillStyle = 'rgba(0, 242, 255, 0.2)';
+            dots.forEach(d => {
+                d.y -= d.v;
+                if(d.y < 0) d.y = canvas.height;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.arc(d.x, d.y, 1.5, 0, Math.PI*2);
                 ctx.fill();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(draw);
         }
+        window.addEventListener('resize', resize);
+        resize(); draw();
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas(); animate();
-
-        /* --- LOGIQUE NAVIGATION --- */
+        // --- NAVIGATION ---
         let current = 0;
         const slides = document.querySelectorAll('.slide');
-        
-        function changeSlide(dir) {
+        const countDisplay = document.getElementById('count');
+
+        function move(dir) {
             slides[current].classList.remove('active');
             current = (current + dir + slides.length) % slides.length;
             slides[current].classList.add('active');
-            slides[current].scrollTop = 0; // Reset scroll position
+            countDisplay.innerText = `${current + 1} / 9`;
         }
 
         document.addEventListener('keydown', (e) => {
-            if(e.key === "ArrowRight" || e.key === " ") changeSlide(1);
-            if(e.key === "ArrowLeft") changeSlide(-1);
+            if(e.key === "ArrowRight" || e.key === " ") move(1);
+            if(e.key === "ArrowLeft") move(-1);
         });
     </script>
 </body>
